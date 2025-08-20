@@ -12,6 +12,7 @@ import music_lib
 import pygame 
 import os
 import openai
+import requests
 
 # import sys
 # print(sys.executable)
@@ -92,9 +93,24 @@ def processcommand(c: str):
                 webbrowser.open(f"https://www.youtube.com/results?search_query={search_term}")
                 speak(f"I couldn't find that in your music library. Searching YouTube for {search_term}")
 
-        case _: # this is like else, now if we don't understand anythig lets open AI handle it
-            speak("sorry, i coudn't understand your command//")
+             # this is like else, now if we don't understand anythig lets open AI handle it
+        case _ if "news" in c.lower():
+            api_key = os.getenv("NEWS_API")
+            url = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={api_key}"
 
+            response = requests.get(url)
+            data = response.json()
+
+            # Check if the request was successful
+            if response.status_code == 200:
+                articles = data.get("articles", [])
+                speak("Top Headlines")
+                for i, article in enumerate(articles[:5], start=1):  # Show top 5
+                    speak(article['title'])
+            else:
+                speak("Failed to fetch news")
+
+                      
 if __name__ == "__main__":
     speak("initializing assistant.....")
     speak("say the code word to activate assistant.....")
@@ -130,10 +146,8 @@ if __name__ == "__main__":
                     command = r.recognize_google(audio)
                     processcommand(command)
                     
-        except sr.UnknownValueError:
-            print("Sorry, I could not understand the audio.")
-        except sr.RequestError as e:
-            print(f"Could not request results; {e}")    
+        except :
+            speak("Sorry, I could not understand the audio.")
         
         
                     
