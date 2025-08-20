@@ -14,7 +14,7 @@ import os
 import openai
 import requests
 
-# import sys
+import sys
 # print(sys.executable)
 
 
@@ -113,8 +113,8 @@ def processcommand(c: str):
                       
 if __name__ == "__main__":
     speak("initializing assistant.....")
-    speak("say the code word to activate assistant.....")
     while True:
+        speak("say the code word to activate assistant.....")
     # now first step is to make a recogniser object 
         r = sr.Recognizer()
     # listen for the wake word "jarvis"
@@ -129,28 +129,26 @@ if __name__ == "__main__":
             word = r.recognize_google(audio)
             
             if "jarvis" not in word.lower():
-                
                 speak("wrong code word detected, I am going to hack you.....")
                 play_beep(2)
+                break
             elif "jarvis" in word.lower():
                 speak ("code word detected, activating jarvis")
                 play_beep(3)
             
                 speak("hello boss, how may i help you")
-    
-                
                 # listen command
-                with sr.Microphone() as source:
-                    print("how may i help you...")    
-                    audio = r.listen(source, timeout=5)   # listen take two parameter (anoter one is time out)
-                    command = r.recognize_google(audio)
-                    processcommand(command)
+                while True:
+                    try:
+                        with sr.Microphone() as source:
+                            audio = r.listen(source, timeout=15)   # listen take two parameter (anoter one is time out)
+                            command = r.recognize_google(audio)
+                            processcommand(command)
+                    except:
+                        speak("No command detected. I am  going to sleep, I will be waiting for you to wake me up, bye boss")
+                        sys.exit()
                     
-        except :
-            speak("Sorry, I could not understand the audio.")
-        
-        
                     
                 
-        
-
+        except Exception:
+            speak("Sorry, I could not understand the audio.")
