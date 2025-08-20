@@ -52,6 +52,16 @@ def play_beep(a: int):
         while pygame.mixer.music.get_busy():   # pygame.mixer.music.get_busy() this shit returns true if music is still playing and false if it's not, if true them loop continues 
             continue
     
+    elif a == 4:
+        pygame.mixer.init()
+        pygame.mixer.music.load("beep_sound_closing.mp3")
+        pygame.mixer.music.play()
+
+    # Optional: wait until sound finishes
+        while pygame.mixer.music.get_busy():   # pygame.mixer.music.get_busy() this shit returns true if music is still playing and false if it's not, if true them loop continues 
+            continue
+    
+
 def speak(command):
     engine = pyttsx3.init()
     engine.say(command) # here engine is what we have assigned to pyttsx.init()
@@ -145,7 +155,9 @@ if __name__ == "__main__":
                             command = r.recognize_google(audio)
                             processcommand(command)
                     except:
-                        speak("No command detected. I am  going to sleep, I will be waiting for you to wake me up, bye boss")
+                        speak("No command detected. I am  going to sleep, I will be waiting for you to wake me up")
+                        speak("bye boss")
+                        play_beep(4)
                         sys.exit()
                     
                     
