@@ -11,19 +11,22 @@ import winsound
 import music_lib
 import pygame 
 import os
-import openai
 import requests
-
+import openai
+import google.generativeai as genai
 import sys
 # print(sys.executable)
 
 
+from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-print(openai.api_key)
+# print(openai.api_key)
+
+
 
 def play_beep(a: int):
     if a == 1:
@@ -67,7 +70,15 @@ def speak(command):
     engine.say(command) # here engine is what we have assigned to pyttsx.init()
     engine.runAndWait()
 
-# speak("hello bro waddup")    
+# # to check the voice 
+# r = sr.Recognizer()
+# with sr.Microphone() as source:
+#     audio = r.listen(source)
+#     word = r.recognize_google(audio)
+#     print(word)
+#     speak(word)
+
+# # speak("hello bro waddup")    
 
 def processcommand(c: str):
     query = c.lower()
@@ -83,9 +94,9 @@ def processcommand(c: str):
             elif "github" in query:
                 webbrowser.open("https://github.com")
             else:
-                site = query.split(" ")[1]
+                site = query.split()[1]
                 webbrowser.open(f"https://{site}.com")
-                speak(f"I couldn't find a specific match, so I'm opening {site}.com")
+                speak(f"so I'm opening {site}.com")
 
         case _ if "play" in query:
             if "succession" in query:
@@ -98,6 +109,8 @@ def processcommand(c: str):
                 webbrowser.open(music_lib.music.get("skyfall"))
             elif "sad girl" in query:
                 webbrowser.open(music_lib.music.get("sad girl"))
+            elif "isq risk" in query:
+                webbrowser.open(music_lib.music.get("isq risk"))
             else:
                 search_term = query.replace("play", "").strip()
                 webbrowser.open(f"https://www.youtube.com/results?search_query={search_term}")
@@ -120,6 +133,23 @@ def processcommand(c: str):
             else:
                 speak("Failed to fetch news")
 
+        case _ :
+            key = os.getenv("GEMINI_API")
+            genai.configure(api_key=key)
+
+            # Give Gemini a role/persona in the prompt
+            prompt = (
+                "You are an AI assistant named jarvis, inspired by ironman. "
+                "Answer as helpfully and not politely as possible."
+                "you are a male and show masculinity "
+                "you can use abusive words when ever required"
+                "just be rude but don't compromise in answering the asked question"
+                f"User: {query}"
+            )
+
+            response = genai.GenerativeModel("gemini-2.5-flash").generate_content(prompt)
+            print(response.text)
+            speak(response.text)
                       
 if __name__ == "__main__":
     speak("initializing assistant.....")
@@ -127,19 +157,20 @@ if __name__ == "__main__":
         speak("say the code word to activate assistant.....")
     # now first step is to make a recogniser object 
         r = sr.Recognizer()
-    # listen for the wake word "jarvis"
-    # obtain an audio from the microphone
-    # source record your audi and keep it with itself so that we can access source and store the audio in command using sr or do other operations                                         
-    # processing function
-        # Recognize speech using google web searh pi
+     # listen for the wake word "jarvis"
+     # obtain an audio from the microphone
+     # source record your audi and keep it with itself so that we can access source and store the audio in command using sr or do other operations                                         
+     # processing function
+         # Recognize speech using google web searh pi
         try:
             with sr.Microphone() as source:
                 print("Listening...")    
                 audio = r.listen(source, timeout=5)   # listen take two parameter (anoter one is time out)
             word = r.recognize_google(audio)
+            speak(word)
             
             if "jarvis" not in word.lower():
-                speak("wrong code word detected, I am going to hack you.....")
+                speak("wrong code word detected, I am going to hack you nigga  , hehe haha ha")
                 play_beep(2)
                 break
             elif "jarvis" in word.lower():
@@ -151,7 +182,7 @@ if __name__ == "__main__":
                 while True:
                     try:
                         with sr.Microphone() as source:
-                            audio = r.listen(source, timeout=15)   # listen take two parameter (anoter one is time out)
+                            audio = r.listen(source, timeout=120)   # listen take two parameter (anoter one is time out)
                             command = r.recognize_google(audio)
                             processcommand(command)
                     except:
@@ -163,4 +194,4 @@ if __name__ == "__main__":
                     
                 
         except Exception:
-            speak("Sorry, I could not understand the audio.")
+            speak("sorry, Iam unable to understand you")
