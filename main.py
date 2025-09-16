@@ -170,7 +170,7 @@ if __name__ == "__main__":
             speak(word)
             
             if "jarvis" not in word.lower():
-                speak("wrong code word detected, I am going to hack you nigga  , hehe haha ha")
+                speak("wrong code word detected, I am going to hack you  , hehe haha ha")
                 play_beep(2)
                 break
             elif "jarvis" in word.lower():
