@@ -15,7 +15,9 @@ import requests
 import openai
 import google.generativeai as genai
 import sys
+# print("bla")
 # print(sys.executable)
+# print("bla")
 
 
 from openai import OpenAI
