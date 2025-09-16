@@ -10,7 +10,8 @@ it does basic tasks for now and soon will rule upon us
 - Custom Activation Sounds (MP3 beeps)
 - Smart Command Loop with timeout and fallback logic
 - Device Selection & Audio Routing
-- Built for experimentation, personalization, and fun!
+- integrated with GOOGLE_GEMINI for real-time response
+- Built for experimentation, personalisation, and fun!
 
 # Installation
 git clone https://github.com/syed/Jarvis.git
@@ -27,7 +28,7 @@ python jarvis.py
 - Say the wake word (e.g. "Jarvis")
 - Speak your command (e.g. "Open YouTube")
 - Jarvis responds and executes your request
-- After 10 seconds of silence, it exits gracefully
+- After some seconds of silence, it exits gracefully
 
 🧩 Customization
 - Change the assistant name in jarvis.py for better speech recognition
@@ -44,9 +45,10 @@ python jarvis.py
 
 🧠 Future Plans
 - Add GUI interface (Tkinter or PyQt)
-- Integrate with APIs (weather, openai, etc.)
+- Integrate with APIs (weather, openai, etc.) - done integrating with Google Gemini on 16 of sep
 - Push to GitHub Pages or Streamlit for demo
 - add new songs to music.lib
 
 # Contributing
 Pull requests are welcome! If you have ideas, bug fixes, or want to add new features, feel free to fork and submit.
+
